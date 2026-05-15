@@ -47,7 +47,7 @@ def create_md(lines: list, layout: list):
             md += f"\ncategory: {item[layout.index('category')]}"
         else:
             md += "\ncategory: manuscripts"
-        md += f"\npermalink: /publication/{html_filename}"
+        md += f"\npermalink: /research/{html_filename}"
         if len(str(item[layout.index('excerpt')])) > 5:
             md += f"\nexcerpt: '{html_escape(item[layout.index('excerpt')])}'"
         md += f"\ndate: {item[layout.index('pub_date')]}"
@@ -65,7 +65,7 @@ def create_md(lines: list, layout: list):
         md += f"\nRecommended citation: {item[layout.index('citation')]}"
         
         # Write the file
-        md_filename = os.path.join("../_publications/", os.path.basename(md_filename))
+        md_filename = os.path.join("../_research/", os.path.basename(md_filename))
         with open(md_filename, 'w') as f:
             f.write(md)
 
