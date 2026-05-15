@@ -10,27 +10,45 @@ author_profile: true
 {% endif %}
 
 {% include base_path %}
+{% assign all_publications = site.publications | sort: "date" | reverse %}
 
-<!-- New style rendering if publication categories are defined -->
 {% if site.publication_category %}
-  {% for category in site.publication_category  %}
-    {% assign title_shown = false %}
-    {% for post in site.publications reversed %}
-      {% if post.category != category[0] %}
-        {% continue %}
-      {% endif %}
-      {% unless title_shown %}
-        <h2>{{ category[1].title }}</h2><hr />
-        {% assign title_shown = true %}
-      {% endunless %}
-      {% include archive-single.html %}
-    {% endfor %}
+  {% for category in site.publication_category %}
+    {% assign categorized_posts = all_publications | where: "category", category[0] %}
+    {% if categorized_posts.size > 0 %}
+      <h2>{{ category[1].title }}</h2>
+      <hr />
+      {% for post in categorized_posts %}
+        <article class="archive__item">
+          <h3><a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ post.title }}</a></h3>
+          <p>
+            <strong>Abstract</strong>
+            {% if post.paperurl %} | <a href="{{ post.paperurl }}">Paper</a>{% endif %}
+            {% if post.slidesurl %} | <a href="{{ post.slidesurl }}">Slides</a>{% endif %}
+            {% if post.bibtexurl %} | <a href="{{ post.bibtexurl }}">BibTeX</a>{% endif %}
+          </p>
+          {% if post.excerpt %}
+            <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
+          {% endif %}
+        </article>
+      {% endfor %}
+    {% endif %}
   {% endfor %}
 {% else %}
-  {% for post in site.publications reversed %}
-    {% include archive-single.html %}
+  {% for post in all_publications %}
+    <article class="archive__item">
+      <h3><a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ post.title }}</a></h3>
+      <p>
+        <strong>Abstract</strong>
+        {% if post.paperurl %} | <a href="{{ post.paperurl }}">Paper</a>{% endif %}
+        {% if post.slidesurl %} | <a href="{{ post.slidesurl }}">Slides</a>{% endif %}
+        {% if post.bibtexurl %} | <a href="{{ post.bibtexurl }}">BibTeX</a>{% endif %}
+      </p>
+      {% if post.excerpt %}
+        <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
+      {% endif %}
+    </article>
   {% endfor %}
 {% endif %}
-
 
 
