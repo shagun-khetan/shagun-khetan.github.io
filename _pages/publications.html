@@ -5,64 +5,78 @@ permalink: /research/
 author_profile: true
 ---
 
-{% if site.author.googlescholar %}
-  <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
-{% endif %}
+<style>
+  .research-page a {
+    text-decoration: none;
+  }
 
-{% include base_path %}
-{% assign all_publications = site.publications | sort: "date" | reverse %}
+  .research-page a:hover {
+    text-decoration: underline;
+  }
 
-{% if site.publication_category %}
-  {% for category in site.publication_category %}
-    {% assign categorized_posts = all_publications | where: "category", category[0] %}
-    {% if categorized_posts.size > 0 %}
-      <h2>{{ category[1].title }}</h2>
-      <hr />
-      {% for post in categorized_posts %}
-        <article class="archive__item">
-          <h3><a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ post.title }}</a></h3>
-          {% if post.authors %}
-            {% capture authors_html %}{{ post.authors | markdownify | remove: '<p>' | remove: '</p>' }}{% endcapture %}
-            <p><strong>Authors:</strong> {{ authors_html }}</p>
-          {% endif %}
-          {% if post.paperurl or post.slidesurl or post.bibtexurl %}
-            <p>
-              {% if post.paperurl %}<a href="{{ post.paperurl }}">Paper</a>{% endif %}
-              {% if post.slidesurl %}{% if post.paperurl %} | {% endif %}<a href="{{ post.slidesurl }}">Slides</a>{% endif %}
-              {% if post.bibtexurl %}{% if post.paperurl or post.slidesurl %} | {% endif %}<a href="{{ post.bibtexurl }}">BibTeX</a>{% endif %}
-            </p>
-          {% endif %}
-          {% if post.excerpt %}
-            <details>
-              <summary>Abstract</summary>
-              <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
-            </details>
-          {% endif %}
-        </article>
-      {% endfor %}
-    {% endif %}
-  {% endfor %}
-{% else %}
-  {% for post in all_publications %}
-    <article class="archive__item">
-      <h3><a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ post.title }}</a></h3>
-      {% if post.authors %}
-        {% capture authors_html %}{{ post.authors | markdownify | remove: '<p>' | remove: '</p>' }}{% endcapture %}
-        <p><strong>Authors:</strong> {{ authors_html }}</p>
+  .research-page details > summary {
+    cursor: pointer;
+  }
+</style>
+
+<div class="research-page">
+  {% if site.author.googlescholar %}
+    <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
+  {% endif %}
+
+  {% include base_path %}
+  {% assign all_publications = site.publications | sort: "date" | reverse %}
+
+  {% if site.publication_category %}
+    {% for category in site.publication_category %}
+      {% assign categorized_posts = all_publications | where: "category", category[0] %}
+      {% if categorized_posts.size > 0 %}
+        <h2>{{ category[1].title }}</h2>
+        <hr />
+        {% for post in categorized_posts %}
+          <article class="archive__item">
+            <h3>{{ post.title }}</h3>
+            {% if post.with %}
+              {% capture with_html %}{{ post.with | markdownify | remove: '<p>' | remove: '</p>' }}{% endcapture %}
+              <p>with {{ with_html }}</p>
+            {% endif %}
+            {% if post.paperurl or post.slidesurl %}
+              <p>
+                {% if post.paperurl %}<a href="{{ post.paperurl }}">Paper</a>{% endif %}
+                {% if post.slidesurl %}{% if post.paperurl %} | {% endif %}<a href="{{ post.slidesurl }}">Slides</a>{% endif %}
+              </p>
+            {% endif %}
+            {% if post.excerpt %}
+              <details>
+                <summary>Abstract</summary>
+                <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
+              </details>
+            {% endif %}
+          </article>
+        {% endfor %}
       {% endif %}
-      {% if post.paperurl or post.slidesurl or post.bibtexurl %}
-        <p>
-          {% if post.paperurl %}<a href="{{ post.paperurl }}">Paper</a>{% endif %}
-          {% if post.slidesurl %}{% if post.paperurl %} | {% endif %}<a href="{{ post.slidesurl }}">Slides</a>{% endif %}
-          {% if post.bibtexurl %}{% if post.paperurl or post.slidesurl %} | {% endif %}<a href="{{ post.bibtexurl }}">BibTeX</a>{% endif %}
-        </p>
-      {% endif %}
-      {% if post.excerpt %}
-        <details>
-          <summary>Abstract</summary>
-          <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
-        </details>
-      {% endif %}
-    </article>
-  {% endfor %}
-{% endif %}
+    {% endfor %}
+  {% else %}
+    {% for post in all_publications %}
+      <article class="archive__item">
+        <h3>{{ post.title }}</h3>
+        {% if post.with %}
+          {% capture with_html %}{{ post.with | markdownify | remove: '<p>' | remove: '</p>' }}{% endcapture %}
+          <p>with {{ with_html }}</p>
+        {% endif %}
+        {% if post.paperurl or post.slidesurl %}
+          <p>
+            {% if post.paperurl %}<a href="{{ post.paperurl }}">Paper</a>{% endif %}
+            {% if post.slidesurl %}{% if post.paperurl %} | {% endif %}<a href="{{ post.slidesurl }}">Slides</a>{% endif %}
+          </p>
+        {% endif %}
+        {% if post.excerpt %}
+          <details>
+            <summary>Abstract</summary>
+            <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
+          </details>
+        {% endif %}
+      </article>
+    {% endfor %}
+  {% endif %}
+</div>
