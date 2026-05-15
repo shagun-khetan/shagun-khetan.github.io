@@ -21,6 +21,10 @@ author_profile: true
       {% for post in categorized_posts %}
         <article class="archive__item">
           <h3><a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ post.title }}</a></h3>
+          {% if post.authors %}
+            {% capture authors_html %}{{ post.authors | markdownify | remove: '<p>' | remove: '</p>' }}{% endcapture %}
+            <p><strong>Authors:</strong> {{ authors_html }}</p>
+          {% endif %}
           {% if post.paperurl or post.slidesurl or post.bibtexurl %}
             <p>
               {% if post.paperurl %}<a href="{{ post.paperurl }}">Paper</a>{% endif %}
@@ -42,6 +46,10 @@ author_profile: true
   {% for post in all_publications %}
     <article class="archive__item">
       <h3><a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ post.title }}</a></h3>
+      {% if post.authors %}
+        {% capture authors_html %}{{ post.authors | markdownify | remove: '<p>' | remove: '</p>' }}{% endcapture %}
+        <p><strong>Authors:</strong> {{ authors_html }}</p>
+      {% endif %}
       {% if post.paperurl or post.slidesurl or post.bibtexurl %}
         <p>
           {% if post.paperurl %}<a href="{{ post.paperurl }}">Paper</a>{% endif %}
@@ -58,4 +66,3 @@ author_profile: true
     </article>
   {% endfor %}
 {% endif %}
-
