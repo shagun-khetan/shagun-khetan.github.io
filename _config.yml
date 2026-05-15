@@ -23,7 +23,7 @@ repository               : "shagun-khetan/shagun-khetan.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "bio-photo.png"
+  avatar           : "profile.png"
   name             : "Shagun Khetan"
   pronouns         : # example: "she/her"  
   bio              : "Economics, Math and Finance at Ashoka University"
