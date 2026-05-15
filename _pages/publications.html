@@ -47,6 +47,12 @@ author_profile: true
     display: block;
     margin-top: 0.5em;
   }
+
+  .paper-divider {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 1.5em 0;
+  }
 </style>
 
 <div class="research-page">
@@ -81,10 +87,7 @@ author_profile: true
               {% assign has_item = false %}
               <div class="research-actions">
                 {% if post.excerpt %}
-                  <details class="inline-abstract">
-                    <summary>Abstract</summary>
-                    <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
-                  </details>
+                  <span class="archive__item-excerpt">Abstract: {{ post.excerpt | markdownify }}</span>
                   {% assign has_item = true %}
                 {% endif %}
                 {% if post.paperurl %}
@@ -97,6 +100,7 @@ author_profile: true
               </div>
             {% endif %}
           </article>
+          <hr class="paper-divider" />
         {% endfor %}
       {% endif %}
     {% endfor %}
@@ -119,11 +123,8 @@ author_profile: true
           {% assign has_item = false %}
           <div class="research-actions">
             {% if post.excerpt %}
-              <details class="inline-abstract">
-                <summary>Abstract</summary>
-                <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
-              </details>
-              {% assign has_item = true %}
+                <span class="archive__item-excerpt">Abstract: {{ post.excerpt | markdownify }}</span>
+                 {% assign has_item = true %}
             {% endif %}
             {% if post.paperurl %}
               {% if has_item %} | {% endif %}<a href="{{ post.paperurl }}">Paper</a>
@@ -135,6 +136,7 @@ author_profile: true
           </div>
         {% endif %}
       </article>
+      <hr class="paper-divider" />
     {% endfor %}
   {% endif %}
 </div>
