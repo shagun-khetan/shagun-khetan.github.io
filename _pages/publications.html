@@ -17,6 +17,26 @@ author_profile: true
   .research-page details > summary {
     cursor: pointer;
   }
+
+  .research-page .research-actions {
+    margin: 0.4em 0 0.7em;
+  }
+
+  .research-page .research-actions > * {
+    display: inline;
+  }
+
+  .research-page details.inline-abstract > summary {
+    display: inline;
+  }
+
+  .research-page details.inline-abstract[open] > summary {
+    margin-right: 0.35em;
+  }
+
+  .research-page details.inline-abstract > div {
+    margin-top: 0.5em;
+  }
 </style>
 
 <div class="research-page">
@@ -35,22 +55,36 @@ author_profile: true
         <hr />
         {% for post in categorized_posts %}
           <article class="archive__item">
-            <h3>{{ post.title }}</h3>
-            {% if post.with %}
-              {% capture with_html %}{{ post.with | markdownify | remove: '<p>' | remove: '</p>' }}{% endcapture %}
+            {% if post.paperurl %}
+              <h3><a href="{{ post.paperurl }}">{{ post.title }}</a></h3>
+            {% else %}
+              <h3>{{ post.title }}</h3>
+            {% endif %}
+
+            {% assign coauthors = post.with | default: post.authors %}
+            {% if coauthors %}
+              {% capture with_html %}{{ coauthors | markdownify | remove: '<p>' | remove: '</p>' }}{% endcapture %}
               <p>with {{ with_html }}</p>
             {% endif %}
-            {% if post.paperurl or post.slidesurl %}
-              <p>
-                {% if post.paperurl %}<a href="{{ post.paperurl }}">Paper</a>{% endif %}
-                {% if post.slidesurl %}{% if post.paperurl %} | {% endif %}<a href="{{ post.slidesurl }}">Slides</a>{% endif %}
-              </p>
-            {% endif %}
-            {% if post.excerpt %}
-              <details>
-                <summary>Abstract</summary>
-                <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
-              </details>
+
+            {% if post.excerpt or post.paperurl or post.slidesurl %}
+              {% assign has_item = false %}
+              <div class="research-actions">
+                {% if post.excerpt %}
+                  <details class="inline-abstract">
+                    <summary>Abstract</summary>
+                    <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
+                  </details>
+                  {% assign has_item = true %}
+                {% endif %}
+                {% if post.paperurl %}
+                  {% if has_item %} | {% endif %}<a href="{{ post.paperurl }}">Paper</a>
+                  {% assign has_item = true %}
+                {% endif %}
+                {% if post.slidesurl %}
+                  {% if has_item %} | {% endif %}<a href="{{ post.slidesurl }}">Slides</a>
+                {% endif %}
+              </div>
             {% endif %}
           </article>
         {% endfor %}
@@ -59,22 +93,36 @@ author_profile: true
   {% else %}
     {% for post in all_publications %}
       <article class="archive__item">
-        <h3>{{ post.title }}</h3>
-        {% if post.with %}
-          {% capture with_html %}{{ post.with | markdownify | remove: '<p>' | remove: '</p>' }}{% endcapture %}
+        {% if post.paperurl %}
+          <h3><a href="{{ post.paperurl }}">{{ post.title }}</a></h3>
+        {% else %}
+          <h3>{{ post.title }}</h3>
+        {% endif %}
+
+        {% assign coauthors = post.with | default: post.authors %}
+        {% if coauthors %}
+          {% capture with_html %}{{ coauthors | markdownify | remove: '<p>' | remove: '</p>' }}{% endcapture %}
           <p>with {{ with_html }}</p>
         {% endif %}
-        {% if post.paperurl or post.slidesurl %}
-          <p>
-            {% if post.paperurl %}<a href="{{ post.paperurl }}">Paper</a>{% endif %}
-            {% if post.slidesurl %}{% if post.paperurl %} | {% endif %}<a href="{{ post.slidesurl }}">Slides</a>{% endif %}
-          </p>
-        {% endif %}
-        {% if post.excerpt %}
-          <details>
-            <summary>Abstract</summary>
-            <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
-          </details>
+
+        {% if post.excerpt or post.paperurl or post.slidesurl %}
+          {% assign has_item = false %}
+          <div class="research-actions">
+            {% if post.excerpt %}
+              <details class="inline-abstract">
+                <summary>Abstract</summary>
+                <div class="archive__item-excerpt">{{ post.excerpt | markdownify }}</div>
+              </details>
+              {% assign has_item = true %}
+            {% endif %}
+            {% if post.paperurl %}
+              {% if has_item %} | {% endif %}<a href="{{ post.paperurl }}">Paper</a>
+              {% assign has_item = true %}
+            {% endif %}
+            {% if post.slidesurl %}
+              {% if has_item %} | {% endif %}<a href="{{ post.slidesurl }}">Slides</a>
+            {% endif %}
+          </div>
         {% endif %}
       </article>
     {% endfor %}
