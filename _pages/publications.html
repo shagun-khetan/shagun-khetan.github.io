@@ -26,8 +26,17 @@ author_profile: true
     display: inline;
   }
 
+  .research-page details.inline-abstract {
+    display: inline;
+  }
+
   .research-page details.inline-abstract > summary {
     display: inline;
+    list-style: none;
+  }
+
+  .research-page details.inline-abstract > summary::-webkit-details-marker {
+    display: none;
   }
 
   .research-page details.inline-abstract[open] > summary {
@@ -35,6 +44,7 @@ author_profile: true
   }
 
   .research-page details.inline-abstract > div {
+    display: block;
     margin-top: 0.5em;
   }
 </style>
