@@ -9,9 +9,9 @@ redirect_from:
 
 [Download CV (PDF)](https://shagun-khetan.github.io/files/cv_github.pdf)
 
-<!-- <iframe 
-    src="/assets/pdf/CV.pdf"
+<iframe 
+    src="https://shagun-khetan.github.io/files/cv_github.pdf"
     width="100%" 
     height="900px"
     style="border:none;">
-</iframe> -->
+</iframe>
