@@ -14,38 +14,20 @@ author_profile: true
     text-decoration: underline;
   }
 
-  .research-page details > summary {
-    cursor: pointer;
-  }
-
   .research-page .research-actions {
     margin: 0.4em 0 0.7em;
   }
 
-  .research-page .research-actions > * {
-    display: inline;
+  .research-page .abstract-toggle {
+    cursor: pointer;
   }
 
-  .research-page details.inline-abstract {
-    display: inline;
-  }
-
-  .research-page details.inline-abstract > summary {
-    display: inline;
-    list-style: none;
-  }
-
-  .research-page details.inline-abstract > summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .research-page details.inline-abstract[open] > summary {
-    margin-right: 0.35em;
-  }
-
-  .research-page details.inline-abstract > div {
-    display: block;
+  .research-page .research-abstract {
     margin-top: 0.5em;
+  }
+
+  .research-page [hidden] {
+    display: none !important;
   }
 
   .paper-divider {
@@ -83,11 +65,12 @@ author_profile: true
               <p>with {{ with_html }}</p>
             {% endif %}
 
-            {% if post.excerpt or post.paperurl or post.slidesurl %}
+            {% assign abstract_id = "abs-" | append: category[0] | append: "-" | append: forloop.index0 %}
+            {% if post.excerpt or post.paperurl or post.slidesurl or post.nberurl %}
               {% assign has_item = false %}
               <div class="research-actions">
                 {% if post.excerpt %}
-                  <span class="archive__item-excerpt">Abstract: {{ post.excerpt | markdownify }}</span>
+                  <a href="#" class="abstract-toggle" data-target="{{ abstract_id }}">Abstract</a>
                   {% assign has_item = true %}
                 {% endif %}
                 {% if post.paperurl %}
@@ -96,7 +79,13 @@ author_profile: true
                 {% endif %}
                 {% if post.slidesurl %}
                   {% if has_item %} | {% endif %}<a href="{{ post.slidesurl }}">Slides</a>
+                  {% assign has_item = true %}
                 {% endif %}
+              </div>
+            {% endif %}
+            {% if post.excerpt %}
+              <div id="{{ abstract_id }}" class="research-abstract archive__item-excerpt" hidden>
+                {{ post.excerpt | markdownify }}
               </div>
             {% endif %}
           </article>
@@ -119,12 +108,13 @@ author_profile: true
           <p>with {{ with_html }}</p>
         {% endif %}
 
-        {% if post.excerpt or post.paperurl or post.slidesurl %}
+        {% assign abstract_id = "abs-all-" | append: forloop.index0 %}
+        {% if post.excerpt or post.paperurl or post.slidesurl or post.nberurl %}
           {% assign has_item = false %}
           <div class="research-actions">
             {% if post.excerpt %}
-                <span class="archive__item-excerpt">Abstract: {{ post.excerpt | markdownify }}</span>
-                 {% assign has_item = true %}
+              <a href="#" class="abstract-toggle" data-target="{{ abstract_id }}">Abstract</a>
+              {% assign has_item = true %}
             {% endif %}
             {% if post.paperurl %}
               {% if has_item %} | {% endif %}<a href="{{ post.paperurl }}">Paper</a>
@@ -132,7 +122,13 @@ author_profile: true
             {% endif %}
             {% if post.slidesurl %}
               {% if has_item %} | {% endif %}<a href="{{ post.slidesurl }}">Slides</a>
+              {% assign has_item = true %}
             {% endif %}
+          </div>
+        {% endif %}
+        {% if post.excerpt %}
+          <div id="{{ abstract_id }}" class="research-abstract archive__item-excerpt" hidden>
+            {{ post.excerpt | markdownify }}
           </div>
         {% endif %}
       </article>
@@ -140,3 +136,15 @@ author_profile: true
     {% endfor %}
   {% endif %}
 </div>
+
+<script>
+  document.addEventListener("click", function (event) {
+    var toggle = event.target.closest(".abstract-toggle");
+    if (!toggle) return;
+    event.preventDefault();
+    var targetId = toggle.getAttribute("data-target");
+    var abstract = document.getElementById(targetId);
+    if (!abstract) return;
+    abstract.hidden = !abstract.hidden;
+  });
+</script>
